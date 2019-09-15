@@ -4,9 +4,21 @@
 
    <url>
 
-      <loc>http://www.example.com/</loc>
+      <loc>http://www.mp3towav.io/</loc>
 
-      <lastmod>2005-01-01</lastmod>
+      <lastmod>2019-09-01</lastmod>
+
+      <changefreq>monthly</changefreq>
+
+      <priority>0.8</priority>
+
+   </url>
+
+     <url>
+
+      <loc>http://www.mp3towav.io/faq</loc>
+
+      <lastmod>2019-09-01</lastmod>
 
       <changefreq>monthly</changefreq>
 
