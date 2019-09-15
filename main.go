@@ -6,12 +6,14 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 
 	"github.com/foolin/gin-template"
 	"github.com/gin-gonic/gin"
 )
 
 func deleteFiles(paths [2]string) {
+	time.Sleep(5 * time.Second)
 	for _, path := range paths {
 		err := os.Remove(path)
 		if err != nil {
@@ -22,8 +24,6 @@ func deleteFiles(paths [2]string) {
 }
 
 func convert(c *gin.Context) {
-
-	// Source
 	file, err := c.FormFile("file")
 	if err != nil {
 		c.String(http.StatusBadRequest, fmt.Sprintf("upload file err: %s", err.Error()))
@@ -39,9 +39,11 @@ func convert(c *gin.Context) {
 	name := strings.Replace(upload, ".mp3", ".wav", -1)
 	name = strings.Replace(name, "uploads/", "", -1)
 	download := "public/downloads/" + name
-	println(download)
 	cmd := exec.Command("ffmpeg", "-i", upload, "-vn", "-c:a", "copy", download)
 	cmd.Run()
+
+	pathsToDelete := [2]string{download, upload}
+	go deleteFiles(pathsToDelete)
 	c.FileAttachment(download, file.Filename)
 }
 
