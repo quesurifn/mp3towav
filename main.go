@@ -53,6 +53,10 @@ func main() {
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.HTML(http.StatusOK, "index.html", gin.H{})
 	})
+	router.GET("/faq", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "faq.html", gin.H{})
+	})
+
 	router.POST("/convert", convert)
 	router.Run(":3000")
 }
