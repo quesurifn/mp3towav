@@ -38,22 +38,20 @@ func convert(c *gin.Context) {
 
 	name := strings.Replace(upload, ".mp3", ".wav", -1)
 	name = strings.Replace(name, "uploads/", "", -1)
-	download := "downloads/" + name
+	download := "public/downloads/" + name
+	println(download)
 	cmd := exec.Command("ffmpeg", "-i", upload, "-vn", "-c:a", "copy", download)
 	cmd.Run()
-	pathsToRemove := [2]string{download, upload}
-	deleteFiles(pathsToRemove)
-	c.File(download)
+	c.FileAttachment(download, file.Filename)
 }
 
 func main() {
 	router := gin.Default()
-
-	//new template engine
+	router.Static("/public", "./public")
 	router.HTMLRender = gintemplate.Default()
 
 	router.GET("/", func(ctx *gin.Context) {
-		ctx.HTML(http.StatusOK, "page.html", gin.H{"title": "Page file title!!"})
+		ctx.HTML(http.StatusOK, "index.html", gin.H{})
 	})
 	router.POST("/convert", convert)
 	router.Run(":3000")
