@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -42,9 +43,10 @@ func convert(c *gin.Context) {
 	cmd := exec.Command("ffmpeg", "-i", upload, "-vn", "-c:a", "copy", download)
 	cmd.Run()
 
+	downloadFileName := strings.TrimSuffix(file.Filename, filepath.Ext(file.Filename))
 	pathsToDelete := [2]string{download, upload}
 	go deleteFiles(pathsToDelete)
-	c.FileAttachment(download, file.Filename)
+	c.FileAttachment(download, downloadFileName+".wav")
 }
 
 func main() {
