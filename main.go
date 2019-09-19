@@ -77,7 +77,7 @@ func sendFileAndDelete(c *gin.Context) {
 	go deleteFiles(pathsToDelete)
 	println("Download")
 	println(download, filenameWithoutExtension)
-	c.FileAttachment(download, filenameWithoutExtension)
+	c.FileAttachment(download, filenameWithoutExtension+"wav")
 }
 
 func main() {
