@@ -5,16 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Free MP3 to WAV Converter</title>
     <meta name="description" content="Free MP3 to WAV Converter is the best place to convert MP3 files to the WAV format.">
-    <link rel="stylesheet" type="text/css" href="public/assets/css/index.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="public/assets/css/index.css">
 </head>
 <body>
     <main>
         <h1>Free MP3 to WAV Converter</h1>
         <form method="POST" action="/convert" enctype="multipart/form-data" target="_blank">
-            <input type="file" name="file" value="file" id="file" required>
-             <label for="file">Select a file to upload</label> 
-             <input type="submit" value="submit">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="file" name="file" value="file" size="60" style="padding:5px;" required>
+                    <input class="btn btn-dark" type="submit" value="Submit">
+                </div>
+            </div>
         </form>
     </main>
 </body>
