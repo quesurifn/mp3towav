@@ -100,6 +100,9 @@ func main() {
 		ctx.HTML(http.StatusOK, "index.html", gin.H{})
 	})
 
+	router.GET("/heartbeat", func(ctx *gin.Context) {
+		ctx.String(http.StatusOK, "beat")
+	})
 	router.GET("/file/:name", sendFileAndDelete)
 	router.POST("/convert", convert)
 	router.NoRoute(func(ctx *gin.Context) {
