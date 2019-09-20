@@ -12,6 +12,7 @@ import (
 	"github.com/foolin/gin-template"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/thinkerou/favicon"
 )
 
 func deleteFiles(paths [2]string) {
@@ -64,25 +65,20 @@ func convert(c *gin.Context) {
 func sendFileAndDelete(c *gin.Context) {
 
 	name := c.Param("name")
-
-	println("name")
-	println(name)
 	filenameWithoutExtension := strings.TrimSuffix(name, filepath.Ext(name))
-	println("Filename")
 	println(filenameWithoutExtension)
 
 	upload := "uploads/" + name
 	download := "public/downloads/" + filenameWithoutExtension + ".wav"
 	pathsToDelete := [2]string{download, upload}
 	go deleteFiles(pathsToDelete)
-	println("Download")
-	println(download, filenameWithoutExtension)
-	c.FileAttachment(download, filenameWithoutExtension+"wav")
+	c.FileAttachment(download, filenameWithoutExtension+".wav")
 }
 
 func main() {
 	router := gin.Default()
-	router.Static("/public", "./public")
+	router.Static("/static", "./public")
+	router.Use(favicon.New("./public/favicon.ico"))
 	router.HTMLRender = gintemplate.Default()
 
 	router.Use(cors.New(cors.Config{
@@ -100,8 +96,14 @@ func main() {
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.HTML(http.StatusOK, "index.html", gin.H{})
 	})
+	router.GET("/terms", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "index.html", gin.H{})
+	})
 
 	router.GET("/file/:name", sendFileAndDelete)
 	router.POST("/convert", convert)
+	router.NoRoute(func(ctx *gin.Context) {
+		ctx.HTML(http.StatusNotFound, "404.html", gin.H{})
+	})
 	router.Run(":4000")
 }
