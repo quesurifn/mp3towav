@@ -11,8 +11,8 @@ import (
 
 	"github.com/foolin/gin-template"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
-	"github.com/thinkerou/favicon"
 	"github.com/unrolled/secure"
 )
 
@@ -97,8 +97,7 @@ func main() {
 	r.Use(secureFunc)
 
 	router := gin.Default()
-	router.Static("/static", "./public")
-	router.Use(favicon.New("./public/favicon.ico"))
+	r.Use(static.Serve("/", static.LocalFile("/public", false)))
 	router.HTMLRender = gintemplate.Default()
 
 	router.Use(cors.New(cors.Config{
