@@ -112,5 +112,5 @@ func main() {
 	router.NoRoute(func(ctx *gin.Context) {
 		ctx.HTML(http.StatusNotFound, "404.html", gin.H{})
 	})
-	router.Run(":4000")
+	router.RunTLS(":443", "/etc/letsencrypt/live/mp3towav.io/fullchain.pem", "/etc/letsencrypt/live/mp3towav.io/privkey.pem")
 }
