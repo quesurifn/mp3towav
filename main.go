@@ -11,7 +11,6 @@ import (
 
 	"github.com/foolin/gin-template"
 	"github.com/gin-contrib/cors"
-	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/unrolled/secure"
 )
@@ -97,7 +96,7 @@ func main() {
 	r.Use(secureFunc)
 
 	router := gin.Default()
-	r.Use(static.Serve("/", static.LocalFile("/public", false)))
+	router.Static("/static", "./public")
 	router.HTMLRender = gintemplate.Default()
 
 	router.Use(cors.New(cors.Config{
@@ -128,6 +127,12 @@ func main() {
 	})
 	router.GET("/file/:name", sendFileAndDelete)
 	router.POST("/convert", convert)
+	router.GET("/googlecd90d15d387ea206.html", func(ctx *gin.Context) {
+		ctx.Redirect(http.StatusPermanentRedirect, "https://mp3towav.io/static/googlecd90d15d387ea206.html")
+	})
+	router.GET("/sitemap.xml", func(ctx *gin.Context) {
+		ctx.Redirect(http.StatusPermanentRedirect, "https://mp3towav.io/static/sitemap.xml")
+	})
 	router.NoRoute(func(ctx *gin.Context) {
 		ctx.HTML(http.StatusNotFound, "404.html", gin.H{})
 	})
@@ -135,6 +140,7 @@ func main() {
 	r.GET("/", func(c *gin.Context) {
 		c.String(200, "X-Frame-Options header is now `DENY`.")
 	})
+
 	go r.Run(":80")
 	router.RunTLS(":443", "/etc/letsencrypt/live/mp3towav.io/fullchain.pem", "/etc/letsencrypt/live/mp3towav.io/privkey.pem")
 }
