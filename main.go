@@ -13,6 +13,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/thinkerou/favicon"
+	"github.com/unrolled/secure"
 )
 
 func deleteFiles(paths [2]string) {
@@ -76,6 +77,25 @@ func sendFileAndDelete(c *gin.Context) {
 }
 
 func main() {
+	r := gin.Default()
+	secureFunc := func() gin.HandlerFunc {
+		return func(c *gin.Context) {
+			secureMiddleware := secure.New(secure.Options{
+				SSLRedirect: true,
+				SSLHost:     "localhost:443",
+			})
+			err := secureMiddleware.Process(c.Writer, c.Request)
+
+			// If there was an error, do not continue.
+			if err != nil {
+				return
+			}
+
+			c.Next()
+		}
+	}()
+	r.Use(secureFunc)
+
 	router := gin.Default()
 	router.Static("/static", "./public")
 	router.Use(favicon.New("./public/favicon.ico"))
@@ -112,5 +132,10 @@ func main() {
 	router.NoRoute(func(ctx *gin.Context) {
 		ctx.HTML(http.StatusNotFound, "404.html", gin.H{})
 	})
+
+	r.GET("/", func(c *gin.Context) {
+		c.String(200, "X-Frame-Options header is now `DENY`.")
+	})
+	go r.Run(":80")
 	router.RunTLS(":443", "/etc/letsencrypt/live/mp3towav.io/fullchain.pem", "/etc/letsencrypt/live/mp3towav.io/privkey.pem")
 }
