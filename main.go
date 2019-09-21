@@ -82,7 +82,7 @@ func main() {
 		return func(c *gin.Context) {
 			secureMiddleware := secure.New(secure.Options{
 				SSLRedirect: true,
-				SSLHost:     "localhost:443",
+				SSLHost:     "mp3towav.io:443",
 			})
 			err := secureMiddleware.Process(c.Writer, c.Request)
 
